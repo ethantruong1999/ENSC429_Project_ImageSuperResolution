@@ -75,8 +75,35 @@ function output = adaptiveMedianFilter(input)
     output = uint8(output);  
 end
 
-% Usage
-inputImage = imread('noiseIm.png');
-imshow(inputImage);
-output = adaptiveMedianFilter(inputImage);
-imshow(output); 
+% Define the directory containing the images
+inputDir = 'inputImagePath';
+outputDir = 'savedImagePath';
+
+% Get a list of all image files in the directory
+imageFiles = dir(fullfile(inputDir, '*.jpg')); 
+
+% Creates a new directory if it does not exist
+if ~exist(outputDir, 'dir')
+    mkdir(outputDir);
+end
+
+% Loop through each image file
+for k = 1:length(imageFiles)
+
+    disp("Image: ")
+    disp(k)
+
+    % Gets the image
+    inputFileName = fullfile(inputDir, imageFiles(k).name);
+    inputImage = imread(inputFileName);
+    
+    % Applies Adaptive Median Filter to denoise the image
+    outputImage = adaptiveMedianFilter(inputImage);
+    
+    % Construction of the Output file
+    [~, name, ext] = fileparts(imageFiles(k).name);
+    outputFileName = fullfile(outputDir, [name '_filtered' ext]);
+    imwrite(outputImage, outputFileName);
+end
+
+disp('Batch processing complete.');
