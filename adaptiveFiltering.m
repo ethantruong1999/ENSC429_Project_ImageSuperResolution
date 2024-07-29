@@ -99,6 +99,9 @@ for k = 1:length(imageFiles)
     
     % Applies Adaptive Median Filter to denoise the image
     outputImage = adaptiveMedianFilter(inputImage);
+    for i = 1:3
+        outputImage = adaptiveMedianFilter(uint8(outputImage));
+    end
     
     % Construction of the Output file
     [~, name, ext] = fileparts(imageFiles(k).name);
